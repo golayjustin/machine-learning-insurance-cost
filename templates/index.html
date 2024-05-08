@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Insurance Cost</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+       <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 350px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            width: 100%;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 50%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004494;
+        }
+           a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #004494; /* Darker shade on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Insurance Cost Prediction Form</h1>
+    <form id="predictionForm" method="post">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="0" max="110"><br><br>
+
+        <label for="sex">Sex:</label>
+        <select id="sex" name="sex">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select><br><br>
+
+        <label for="bmi">BMI:</label>
+        <input type="number" id="bmi" name="bmi" min="15" max="50" step="0.1"><br><br>
+
+        <label for="children">Number of Children:</label>
+        <input type="number" id="children" name="children" min="0" max="25"><br><br>
+
+        <label for="smoker">Smoker:</label>
+        <select id="smoker" name="smoker">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select><br><br>
+
+        <label for="region">Region:</label>
+        <select id="region" name="region">
+            <option value="northwest">Northwest</option>
+            <option value="southeast">Southeast</option>
+            <option value="southwest">Southwest</option>
+        </select><br><br>
+
+        <button type="submit">Predict Cost</button>
+    </form>
+
+    <div id="predictionResult"></div>
+<script>
+    $(document).ready(function() {
+        $('#predictionForm').on('submit', function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: '/predict',
+                data: formData,
+                success: function(response) {
+                    $('#predictionResult').html('<p>Predicted Cost: $' + response.prediction.toFixed(2) + '</p>');
+                },
+                error: function(error) {
+                    $('#predictionResult').html('<p>Error calculating prediction.</p>');
+                }
+            });
+        });
+    });
+    </script>
+
+    <br><br>
+    <a href="/visualizations">Evaluators: View Data Visualizations Here</a>
+
+
+</body>
+</html>
